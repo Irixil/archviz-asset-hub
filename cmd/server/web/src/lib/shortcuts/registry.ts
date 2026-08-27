@@ -1,0 +1,112 @@
+import { m } from '$lib/paraglide/messages'
+import type { ActionMetaMap, KeyMap, ShortcutGroup } from './types'
+
+export const DEFAULT_KEYMAP: KeyMap = {
+  'palette.open': ['$mod+k'],
+  'search.focus': ['s', 'S'],
+  'upload.open': ['$mod+u'],
+  'asset.delete': ['$mod+Backspace'],
+  'asset.download': ['$mod+d'],
+  'asset.rename': ['r', 'R'],
+  'asset.share': ['$mod+Shift+s'],
+  'asset.open-detail': ['Enter'],
+  'selection.all': ['$mod+a'],
+  'selection.clear': ['Escape'],
+  'selection.invert': ['$mod+Shift+i'],
+  'view.toggle-layout': ['v'],
+  'view.zoom-in': ['$mod+=', '$mod+NumpadAdd', '+'],
+  'view.zoom-out': ['$mod+-', '$mod+NumpadSubtract', '-'],
+  'view.zoom-reset': ['$mod+0'],
+  'lightbox.close': ['Escape'],
+  'lightbox.next': ['ArrowRight', 'l'],
+  'lightbox.prev': ['ArrowLeft', 'h'],
+  'lightbox.download': ['$mod+d'],
+  'lightbox.zoom-in': ['+', '='],
+  'lightbox.zoom-out': ['-'],
+  'navigate.library': ['g l'],
+  'navigate.tags': ['g t'],
+  'navigate.settings': ['g s'],
+  'navigate.shares': ['g h'],
+  'help.toggle': ['?', 'Shift+/', ':'],
+  'sidebar.toggle': ['Shift+Tab'],
+  'selection.move-right': ['ArrowRight'],
+  'selection.move-left': ['ArrowLeft'],
+  'selection.move-up': ['ArrowUp'],
+  'selection.move-down': ['ArrowDown'],
+  'history.undo': ['$mod+z'],
+  'history.redo': ['$mod+y', '$mod+Shift+z'],
+}
+
+export const ACTION_CONTEXT: ActionMetaMap = {
+  'lightbox.next': { context: 'lightbox' },
+  'lightbox.prev': { context: 'lightbox' },
+  'lightbox.close': { context: 'lightbox' },
+  'lightbox.download': { context: 'lightbox' },
+  'lightbox.zoom-in': { context: 'lightbox' },
+  'lightbox.zoom-out': { context: 'lightbox' },
+  'selection.move-right': { context: 'grid' },
+  'selection.move-left': { context: 'grid' },
+  'selection.move-up': { context: 'grid' },
+  'selection.move-down': { context: 'grid' },
+}
+
+export const SHORTCUT_GROUPS: ShortcutGroup[] = [
+  {
+    title: 'Global',
+    actions: [
+      { action: 'palette.open', label: m.kb_open_command() },
+      { action: 'search.focus', label: m.kb_focus_search() },
+      { action: 'upload.open', label: m.kb_upload_assets() },
+      { action: 'sidebar.toggle', label: m.kb_toggle_sidebar() },
+      { action: 'help.toggle', label: m.kb_show_keybindings() },
+      { action: 'history.undo', label: m.kb_undo() },
+      { action: 'history.redo', label: m.kb_redo() },
+    ],
+  },
+  {
+    title: 'Assets',
+    actions: [
+      { action: 'asset.open-detail', label: m.kb_open_details() },
+      { action: 'asset.download', label: m.kb_download() },
+      { action: 'asset.rename', label: m.kb_rename() },
+      { action: 'asset.share', label: m.kb_share() },
+      { action: 'asset.delete', label: m.kb_delete() },
+      { action: 'selection.all', label: m.kb_select_all() },
+      { action: 'selection.invert', label: m.kb_select_invert() },
+      { action: 'selection.clear', label: m.kb_select_clear() },
+      { action: 'selection.move-right', label: m.kb_move_r() },
+      { action: 'selection.move-left', label: m.kb_move_l() },
+      { action: 'selection.move-up', label: m.kb_move_u() },
+      { action: 'selection.move-down', label: m.kb_move_d() },
+    ],
+  },
+  {
+    title: 'View',
+    actions: [
+      { action: 'view.toggle-layout', label: m.kb_toggle_grid_mode() },
+      { action: 'view.zoom-in', label: m.kb_zoom_in() },
+      { action: 'view.zoom-out', label: m.kb_zoom_out() },
+      { action: 'view.zoom-reset', label: m.kb_zoom_reset() },
+    ],
+  },
+  {
+    title: 'Lightbox',
+    actions: [
+      { action: 'lightbox.next', label: m.kb_next_asset(), contextual: true },
+      { action: 'lightbox.prev', label: m.kb_prev_asset(), contextual: true },
+      { action: 'lightbox.download', label: m.kb_download(), contextual: true },
+      { action: 'lightbox.zoom-in', label: m.kb_zoom_in(), contextual: true },
+      { action: 'lightbox.zoom-out', label: m.kb_zoom_out(), contextual: true },
+      { action: 'lightbox.close', label: m.kb_close(), contextual: true },
+    ],
+  },
+  {
+    title: 'Navigate',
+    actions: [
+      { action: 'navigate.library', label: m.kb_go_library() },
+      { action: 'navigate.tags', label: m.kb_go_tags() },
+      { action: 'navigate.shares', label: m.kb_go_shares() },
+      { action: 'navigate.settings', label: m.kb_go_settings() },
+    ],
+  },
+]

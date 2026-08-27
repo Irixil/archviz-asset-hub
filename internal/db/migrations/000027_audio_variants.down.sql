@@ -1,0 +1,1 @@
+-- no-op: audio variant types do not require a structural schema change.

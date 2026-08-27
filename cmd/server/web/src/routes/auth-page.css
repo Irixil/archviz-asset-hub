@@ -1,0 +1,80 @@
+/* Shared layout + background tokens for full-page auth routes
+   (forgot-password, reset-password). Mirrors the +error.svelte khatam aesthetic. */
+
+.auth-root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #0e0b1f;
+}
+
+/* Content layer */
+.auth-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0 1.5rem;
+}
+
+/* Card surface */
+.auth-card {
+  width: 100%;
+  background: rgba(12, 11, 23, 0.75);
+  border: 1px solid #2a2240;
+  border-radius: 12px;
+  padding: 2.5rem;
+}
+
+/* Input + button palette overrides for the dark card */
+:global(
+  .auth-card input[type='email'],
+  .auth-card input[type='password'],
+  .auth-card input[type='text']
+) {
+  background: #1a1730;
+  border-color: #2a2240;
+  color: var(--color-gray-300);
+  caret-color: #d5d1cd;
+}
+:global(.auth-card input::placeholder) {
+  color: var(--color-gray-500);
+}
+:global(.auth-card input:focus) {
+  border-color: #d5d1cd55;
+  box-shadow: 0 0 0 2px #d5d1cd22;
+  outline: none;
+}
+
+/* Typography */
+.auth-heading {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-gray-300);
+  margin: 0 0 0.375rem;
+}
+
+.auth-body {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--color-gray-300);
+  margin: 0 0 1.5rem;
+}
+
+/* Footer stamp */
+.auth-footer {
+  margin-top: 1.75rem;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #2a2240;
+  text-align: center;
+}

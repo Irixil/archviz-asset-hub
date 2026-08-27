@@ -1,0 +1,256 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+}
+
+/* Class-based dark mode: add .dark to <html> to activate */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Semantic surface tokens */
+:root {
+  --surface: #fafbf8;
+  --surface-muted: #eef0eb;
+  --bg-app: #eef0ec;
+  --bg-asset-grid: #eef0ec;
+  --bg-surface: #fafbf8;
+  --bg-sidebar: #1f2623;
+  --bg-elevated: #f0f2ed;
+  --bg-stripe: #f5f6f2;
+  --bg-hover: #e6e9e3;
+  --border: #c8cdc6;
+  --border-default: #c8cdc6;
+  --border-subtle: #dde1da;
+  --text-primary: #202622;
+  --text-secondary: #4b5751;
+  --text-muted: #68746e;
+  --accent: #a96618;
+  --accent-hover: #8f5411;
+  --accent-soft: rgb(183 119 29 / 0.13);
+  --accent-text: #815015;
+  --accent-cta: #b7771d;
+  --accent-cta-hover: #9f6215;
+  --accent-cta-active: #844e0e;
+  --accent-danger: #c94343;
+  --accent-error: #ef4444;
+  --accent-warning: #b7771d;
+  --accent-success: #2f7a55;
+  --tag-bg: #e8ebe5;
+  --tag-text: #4b5751;
+  --selection-bar-bg: #27312d;
+  --selection-bar-text: #f4f1e9;
+  --panel-backdrop: rgb(24 30 27 / 0.5);
+  --focus-ring: #c98b31;
+  --shadow-color: 31 38 35;
+}
+
+.dark {
+  --surface: #222825;
+  --surface-muted: #2b322f;
+  --bg-app: #181d1b;
+  --bg-asset-grid: #171c1a;
+  --bg-surface: #222825;
+  --bg-sidebar: #141917;
+  --bg-elevated: #2a312e;
+  --bg-stripe: #1d2320;
+  --bg-hover: #333b37;
+  --border: #46504a;
+  --border-default: #46504a;
+  --border-subtle: #303834;
+  --text-primary: #f1f2ed;
+  --text-secondary: #bdc5bf;
+  --text-muted: #919c95;
+  --accent: #d7a04c;
+  --accent-hover: #e2b263;
+  --accent-soft: rgb(215 160 76 / 0.16);
+  --accent-text: #edc47e;
+  --accent-cta: #c58a32;
+  --accent-cta-hover: #d49b45;
+  --accent-cta-active: #a87024;
+  --accent-danger: #e06161;
+  --tag-bg: #313936;
+  --tag-text: #bdc5bf;
+  --selection-bar-bg: #d7a04c;
+  --selection-bar-text: #211a10;
+  --panel-backdrop: rgb(8 12 10 / 0.72);
+  --focus-ring: #e1ad5b;
+  --shadow-color: 0 0 0;
+}
+
+html {
+  background: var(--bg-app);
+  color: var(--text-primary);
+}
+
+body {
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+}
+
+:focus-visible {
+  outline-color: var(--focus-ring);
+}
+
+* {
+  scrollbar-color: color-mix(in srgb, var(--text-muted) 42%, transparent)
+    transparent;
+  scrollbar-width: thin;
+}
+
+/* text-md: 16px body copy — sits between text-sm (14px) and text-lg (18px) */
+@utility text-md {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.damask-texture::before,
+.damask-texture-strong::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url(/sidebar-texture.webp);
+  background-size: 400px 400px;
+  background-repeat: repeat;
+  opacity: 0.11;
+  pointer-events: none;
+  z-index: 0;
+}
+.damask-texture-strong::before {
+  opacity: 0.3;
+}
+
+/* Diamond divider — Damascus tile corner motif */
+.auth-divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+}
+
+.auth-divider-line {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #d5d1cd55);
+}
+.auth-divider-line:last-child {
+  background: linear-gradient(to left, transparent, #d5d1cd55);
+}
+
+/* Full-bleed SVG background */
+.auth-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Docs prose ────────────────────────────────────────────────────────────── */
+.prose {
+  max-width: 72ch;
+}
+.prose h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+.prose h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 2rem 0 0.75rem;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+.prose h3 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+  color: var(--text-primary);
+}
+.prose p {
+  line-height: 1.7;
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+}
+.prose code {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  background: var(--bg-elevated);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+}
+.prose pre {
+  background: var(--bg-elevated);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border: 1px solid var(--border-subtle);
+}
+.prose pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.8125rem;
+}
+.prose a {
+  color: var(--accent-cta);
+  text-decoration: none;
+}
+.prose a:hover {
+  text-decoration: underline;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.5rem;
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+}
+.prose li {
+  margin-bottom: 0.25rem;
+  line-height: 1.6;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+}
+.prose th {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+.prose td {
+  padding: 0.5rem 0.75rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+}
+.prose blockquote {
+  border: 1px solid var(--border);
+  margin: 1rem 0;
+  padding: 0.625rem 1rem;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border-radius: 6px;
+}
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 2rem 0;
+}

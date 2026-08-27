@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-go:
+    name: Lint (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - name: Create web dist directory
+        run: mkdir -p cmd/server/web/build && echo "{}" > cmd/server/web/build/placeholder.json
+      - uses: golangci/golangci-lint-action@v9
+        with:
+          version: latest
+
+  test-go:
+    name: Test (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - name: Create web dist directory
+        run: mkdir -p cmd/server/web/build && echo "{}" > cmd/server/web/build/placeholder.json
+      - name: Run tests
+        run: go test -mod=mod ./...
+
+  build-go:
+    name: Build (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - name: Create web dist directory
+        run: mkdir -p cmd/server/web/build && echo "{}" > cmd/server/web/build/placeholder.json
+      - name: Build binary
+        run: CGO_ENABLED=0 go build -mod=mod -o bin/damask-server ./cmd/server
+      - name: Build demo binary
+        run: CGO_ENABLED=0 go build -tags=demo -mod=mod -o bin/damask-server-demo ./cmd/server
+
+  check-frontend:
+    name: Check (Svelte)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: cmd/server/web/package-lock.json
+      - name: Install deps
+        working-directory: cmd/server/web
+        run: npm ci
+      - name: Build
+        working-directory: cmd/server/web
+        env:
+          VITE_API_URL: ""
+        run: npm run build
+      - name: Type-check
+        working-directory: cmd/server/web
+        run: npm run check
+
+  check-types-gen:
+    name: Check (types.gen.ts)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Install swag
+        run: go install github.com/swaggo/swag/cmd/swag@latest
+      - name: Regenerate
+        run: swag init -g cmd/server/main.go -o internal/docs --requiredByDefault && npx --yes openapi-typescript@5 internal/docs/swagger.json --output cmd/server/web/src/lib/api/types.gen.ts --immutable-types
+      - name: Assert backend and frontend types are in sync
+        run: git diff --exit-code cmd/server/web/src/lib/api/types.gen.ts
+
+  build-frontend:
+    name: Build (SvelteKit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: cmd/server/web/package-lock.json
+      - name: Install deps
+        working-directory: cmd/server/web
+        run: npm ci
+      - name: Build
+        working-directory: cmd/server/web
+        env:
+          VITE_API_URL: ""
+        run: npm run build

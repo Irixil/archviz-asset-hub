@@ -1,0 +1,29 @@
+{
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "trigger.asset_created",
+      "config": {},
+      "position": { "x": 120, "y": 120 }
+    },
+    {
+      "id": "share",
+      "type": "action.share",
+      "config": {
+        "label": "Auto share",
+        "allow_comments": false,
+        "allow_download": true,
+        "expires_in_days": 14
+      },
+      "position": { "x": 520, "y": 120 }
+    }
+  ],
+  "edges": [
+    {
+      "from_node": "trigger",
+      "from_port": "out",
+      "to_node": "share",
+      "to_port": "in"
+    }
+  ]
+}

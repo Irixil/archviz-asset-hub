@@ -1,0 +1,208 @@
+# Damask
+
+> Self-hosted digital asset management for creative teams that own their data.
+
+Damask is an open-source DAM system you run on your own server. It replaces
+cloud DAM services (Bynder, Brandfolder, Canto) for teams that want full data
+ownership: all files, all metadata, and all audit history stay on infrastructure
+you control. A single Go binary with no external runtime dependencies. SQLite by
+default; the storage layer is an interface — swap in a local path or an
+S3-compatible bucket in config, no code changes.
+
+## Docs
+
+- User guide: /docs/help
+- Self-hosting guide: /docs/tech
+- API reference: /docs/tech/api
+- Installation: /docs/tech/installation
+- Configuration: /docs/tech/configuration
+- Upgrading: /docs/tech/upgrade
+
+---
+
+## Who it's for
+
+**Solo creators** — One person, thousands of files. Damask replaces a folder
+structure that stopped making sense. Fast upload, instant search, and a clean
+way to find the right version of anything.
+
+**Creative teams** — Designers, photographers, video editors working on shared
+projects. Roles and permissions keep work organized without locking people out.
+Everyone sees what they need, nothing more.
+
+**Studios and agencies** — Client deliverables, brand assets, production
+libraries. Damask tracks who uploaded what, when, and what changed. Share work
+with clients without giving them an account. Keep the audit trail in-house.
+
+---
+
+## Data model
+
+### Workspace
+
+The top-level tenant. One Damask instance can serve multiple isolated
+workspaces. Every row in the database is scoped to a workspace_id. Members
+have one of three roles: owner, editor, or viewer.
+
+### Project
+
+Groups assets by client, campaign, or shoot. Color-coded in the sidebar.
+Projects are workspace-scoped. An asset belongs to exactly one project.
+
+### Folder
+
+Two-level hierarchy inside each project (project → folder → asset). Assets
+can be dragged between folders or dragged to root (no folder).
+
+### Asset
+
+A file — image, video, audio, document, or any binary. Core fields: id,
+workspace_id, project_id, folder_id, original_filename, mime_type, size,
+created_at, updated_at, deleted_at (soft delete). Each asset tracks its full
+version history. The "current" version is the most recently uploaded one
+unless a previous version has been manually restored.
+
+### Asset version
+
+A new file uploaded to an existing asset. The previous version is preserved.
+Fields: id, asset_id, workspace_id, storage_key, size, content_hash,
+created_by, created_at, deleted_at. Rollback is one click (sets the current
+version pointer). Share links always point to the current version unless pinned
+to a specific version_id.
+
+### Variant
+
+A non-destructive derivative of an asset. The source asset is never modified.
+Variants are created by background jobs and stored under their own storage_key.
+A variant carries: id, asset_id, workspace_id, type (resize / crop / convert /
+watermark / bg_remove / video_transcode / video_frame / audio_transcode /
+audio_normalize), status (pending / processing / ready / failed), storage_key,
+mime_type, size, params (JSON of transform parameters), title (optional
+human-readable label), is_shared (boolean: expose on share links).
+
+Variant types and their parameters:
+- **resize** — width, height, fit (cover / contain / fill / inside / outside)
+- **crop** — x, y, width, height; or smart_crop: true for content-aware region
+- **convert** — format (jpeg / png / webp / avif), quality
+- **watermark** — overlay asset_id, position (top-left / top-right / bottom-left
+  / bottom-right / center), opacity (0–1), scale (0–1)
+- **bg_remove** — provider (remove_bg); requires API key in workspace settings
+- **video_transcode** — container (mp4), resolution (e.g. 1080p), strip_audio
+- **video_frame** — timestamp_seconds (float)
+- **audio_transcode** — format (mp3 / aac / wav / flac / ogg), bitrate_kbps
+- **audio_normalize** — target_lufs (default −23, EBU R128)
+
+### Tag
+
+Workspace-scoped labels on assets. Auto-created on first use. Tags have an
+optional group_name for visual grouping. System tags (prefixed `_`) are
+reserved: `_watermark` marks the workspace watermark asset, `_template` marks
+template assets. System tags cannot be deleted or renamed via the API.
+
+### Collection
+
+A cross-project named set of assets. Membership is purely additive — removing
+an asset from a collection never touches the original asset. An asset can
+belong to many collections. Collections are workspace-scoped and flat (no
+nesting). Collections are a valid share target.
+
+### Share
+
+A public link for any asset, project, or collection. No recipient account
+required. Fields: id, workspace_id, target_type (asset / project / collection),
+target_id, token (URL-safe random), password_hash (optional), expires_at
+(optional), allow_comments (boolean), allow_download (boolean). Recipients can
+view and leave comments without a Damask account. Shared variants (is_shared =
+true) appear in share galleries.
+
+### Ingress source
+
+An automated ingest pipeline that pulls files into a workspace on a schedule
+or via webhook. Supported types: email (per-workspace unique ingest address),
+sftp, webdav, s3 (S3-compatible), google_drive (OAuth), canva (OAuth). Each
+source maps to a destination folder. Ingest log tracks every item: remote_id,
+filename, asset_id, status (pending / imported / skipped / error).
+
+### Workflow
+
+An automation graph (trigger → conditions → actions) stored as a JSON node
+graph. Supported triggers: asset_uploaded, asset_tagged, asset_version_added,
+schedule (cron), webhook (HMAC-verified inbound HTTP). Supported actions:
+create_variant, add_tag, move_to_folder, share, notify (webhook). Condition
+nodes filter by MIME type, tag, project, file size, etc. Workflow runs are
+logged with per-step status, timing, and error details.
+
+### Custom field
+
+User-defined metadata fields per workspace. Types: text, number, date,
+single-select, multi-select. Fields are ordered, filterable, and indexed in
+FTS5. Up to 50 field definitions per workspace. Values are per-asset.
+
+### Text track
+
+A textual representation of an asset: OCR output, AI-generated description,
+subtitle/caption file, transcription, or manual notes. Each track has a source
+(ocr / ai_description / subtitle / transcription / manual), a language (ISO
+639), plain content stored in the DB row for direct FTS, and an optional
+companion file for structured formats (hOCR, SRT, VTT).
+
+### Audit log
+
+Append-only record of every metadata change: asset renames, retags, project
+moves, field edits, version uploads and restores, share events, member changes.
+Each entry carries: id, workspace_id, user_id, action, entity_type, entity_id,
+diff (JSON of previous/next values), created_at. Configurable retention period.
+
+---
+
+## Self-hosting
+
+**Requirements** — A Linux server (or local machine), Docker or a compiled
+binary, and a writable storage path. No external databases, no message
+brokers, no caches required.
+
+**What you keep** — All files. All metadata. All audit history. No usage caps,
+no per-seat pricing tiers, no data retention clauses.
+
+**Environment variables (key ones)**
+- PORT — HTTP port (default 3000)
+- DB_PATH — path to SQLite file
+- STORAGE_PATH — root path for file storage
+- APP_SECRET — secret for token signing and config encryption (required)
+- APP_URL — public base URL (used in share links and email)
+- STORAGE_BACKEND — "local" (default) or "s3"
+- S3_BUCKET, S3_ENDPOINT, S3_ACCESS_KEY, S3_SECRET_KEY — S3 config
+- SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS — email for invites
+- OIDC_ISSUER_URL, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET — OIDC SSO
+- GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET — Google OIDC + Drive ingress
+- DEMO_MODE — set to "true" to enable the public demo environment
+
+**Schema migrations** run automatically at startup via golang-migrate.
+No manual steps required on upgrade.
+
+**Docker**
+```
+docker run -d \
+  -e APP_SECRET=changeme \
+  -e DB_PATH=/data/damask.db \
+  -e STORAGE_PATH=/data/files \
+  -v /your/data:/data \
+  -p 3000:3000 \
+  ghcr.io/damask/damask:latest
+```
+
+---
+
+## Tech stack
+
+- Backend: Go + Fiber (single static binary)
+- Frontend: SvelteKit + TypeScript + Paraglide i18n
+- Database: SQLite with FTS5 via modernc.org/sqlite (CGO-free)
+- Query layer: sqlc-generated typed functions
+- Auth: Paseto v4 local tokens (bcrypt passwords)
+- File storage: local filesystem or S3-compatible (afero-based interface)
+- Job queue: in-process, SQLite-backed, no external broker
+- Observability: OpenTelemetry traces + metrics (OTLP export)
+- Image processing: libvips (via bimg) for variants
+- Video/audio processing: FFmpeg (shell, CGO-free)
+- OCR: Tesseract (shell, CGO-free)

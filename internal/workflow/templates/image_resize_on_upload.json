@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "trigger.asset_created",
+      "config": {},
+      "position": { "x": 120, "y": 120 }
+    },
+    {
+      "id": "mime",
+      "type": "filter.mime",
+      "config": { "prefix": "image/" },
+      "position": { "x": 520, "y": 120 }
+    },
+    {
+      "id": "resize",
+      "type": "action.create_variant",
+      "config": {
+        "type": "image_resize",
+        "params": { "width": 1600, "height": 1600, "mode": "fit" }
+      },
+      "position": { "x": 920, "y": 120 }
+    }
+  ],
+  "edges": [
+    {
+      "from_node": "trigger",
+      "from_port": "out",
+      "to_node": "mime",
+      "to_port": "in"
+    },
+    {
+      "from_node": "mime",
+      "from_port": "match",
+      "to_node": "resize",
+      "to_port": "in"
+    }
+  ]
+}

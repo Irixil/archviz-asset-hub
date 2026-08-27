@@ -1,0 +1,4 @@
+*.html linguist-detectable=false
+*.css linguist-detectable=false
+Dockerfile linguist-detectable=false
+internal/docs/docs.go linguist-generated=true

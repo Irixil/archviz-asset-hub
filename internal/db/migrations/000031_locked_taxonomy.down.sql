@@ -1,0 +1,2 @@
+-- SQLite does not support DROP COLUMN on older versions; this migration cannot be fully reversed.
+-- If needed, recreate the workspaces table without locked_taxonomy.

@@ -1,0 +1,22 @@
+name: Integration tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-go:
+    name: Integration tests (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - name: Create web dist directory
+        run: mkdir -p cmd/server/web/build && echo "{}" > cmd/server/web/build/placeholder.json
+      - name: Run tests
+        run: make test-integration

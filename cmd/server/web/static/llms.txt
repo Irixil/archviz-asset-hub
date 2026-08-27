@@ -1,0 +1,64 @@
+# Damask
+
+> Self-hosted digital asset management for creative teams that own their data.
+
+Damask is an open-source DAM system you run on your own server. It replaces
+cloud DAM services (Bynder, Brandfolder, Canto) for teams that want full data
+ownership: all files, all metadata, and all audit history stay on infrastructure
+you control.
+
+## Docs
+
+- Docs: /docs/help
+- Self-hosting guide: /docs/tech
+- API reference: /docs/tech/api
+
+## Core concepts
+
+- **Workspace** — the top-level tenant. One Damask instance can serve multiple
+  isolated workspaces.
+- **Project** — groups assets by client, campaign, or shoot. Color-coded in
+  the sidebar.
+- **Folder** — two-level hierarchy inside each project.
+- **Asset** — a file (image, video, audio, document, or any binary). Each
+  asset tracks its full version history.
+- **Version** — a new file uploaded to an existing asset. The previous version
+  is preserved; rollback is one click.
+- **Variant** — a non-destructive derivative of an asset (resized, transcoded,
+  watermarked, background-removed, etc.). The original is never touched.
+- **Tag** — workspace-scoped labels. Auto-created on first use.
+- **Collection** — a cross-project named set of assets. Membership is additive;
+  removing an asset from a collection never deletes the original.
+- **Share** — a public link for any asset, project, or collection. No recipient
+  account required. Supports password protection, expiry, and client review
+  with comments.
+- **Ingress source** — an automated ingest pipeline (email, SFTP, WebDAV, S3,
+  Google Drive, Canva) that pulls files into Damask on a schedule.
+- **Workflow** — an automation graph (trigger → condition → action) that runs
+  on asset events or a schedule.
+- **Custom field** — user-defined metadata fields per workspace (text, number,
+  date, single-select, multi-select). Filterable and full-text searchable.
+- **Audit log** — append-only record of every metadata change: who, when, and
+  what the previous value was.
+
+## Key capabilities
+
+- Full-text search (FTS5) across filenames, custom text fields, and OCR tracks
+- Asset variants: resize, crop, format conversion, watermark, background
+  removal, video transcoding, frame capture, audio transcode/normalize
+- Three roles: owner, editor, viewer
+- OIDC single sign-on (Keycloak, Authelia, Authentik, Okta, Auth0, or any
+  standard OIDC provider)
+- In-process job queue — no Redis, no external broker required
+- SQLite by default; storage layer is swappable (local path or S3-compatible)
+- Single Go binary, no external runtime dependencies
+- Dark and light modes; keyboard-navigable; WCAG AA
+
+## Tech stack
+
+- Backend: Go + Fiber
+- Frontend: SvelteKit + TypeScript
+- Database: SQLite with FTS5 (sqlc-generated queries)
+- Auth: Paseto v4 tokens
+- File storage: local filesystem or S3-compatible (interface-swappable)
+- Observability: OpenTelemetry traces + metrics

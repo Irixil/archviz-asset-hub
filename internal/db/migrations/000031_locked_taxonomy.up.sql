@@ -1,0 +1,1 @@
+ALTER TABLE workspaces ADD COLUMN locked_taxonomy INTEGER NOT NULL DEFAULT 0;

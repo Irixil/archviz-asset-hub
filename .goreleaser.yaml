@@ -1,0 +1,85 @@
+version: 2
+
+project_name: damask
+
+before:
+  hooks:
+    - make build-web
+
+builds:
+
+  - id: damask-admin
+    binary: damask-admin
+    main: ./cmd/admin
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goarm64:
+      - v8.0
+    goamd64:
+      - v1
+
+  - id: damask-server
+    binary: damask-server
+    main: ./cmd/server
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goarm64:
+      - v8.0
+    goamd64:
+      - v1
+
+  - id: damask-server-demo
+    binary: damask-server-demo
+    main: ./cmd/server
+    tags:
+      - demo
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goarm64:
+      - v8.0
+    goamd64:
+      - v1
+
+archives:
+
+  - formats: ["zip", "tar.gz"]
+    wrap_in_directory: true
+    strip_binary_directory: true
+    files:
+      - .env.example
+      - LICENSE
+      - README.md
+    ids:
+      - damask-admin
+      - damask-server
+      - damask-server-demo
+
+# dockers_v2:
+#   - id: damask
+#     ids:
+#       - damask-server
+#       - damask-server-demo
+#       - damask-admin
+#     images:
+#       - "vincent/damask"
+#       - "ghcr.io/vincent/damask"
+#     tags:
+#       - "v{{ .Version }}"
+#       - "{{ if .IsNightly }}nightly{{ end }}"
+#       - "{{ if not .IsNightly }}latest{{ end }}"
+#     labels:
+#       "org.opencontainers.image.description": "Damask is a self-hosted DAM / file sharing and synchronization server."
+#       "org.opencontainers.image.created": "{{.Date}}"
+#       "org.opencontainers.image.name": "{{.ProjectName}}"
+#       "org.opencontainers.image.revision": "{{.FullCommit}}"
+#       "org.opencontainers.image.version": "{{.Version}}"
+#       "org.opencontainers.image.source": "{{.GitURL}}"
+#     platforms:
+#       - linux/amd64
+#       - linux/arm64

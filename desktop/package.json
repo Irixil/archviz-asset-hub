@@ -1,0 +1,14 @@
+{
+  "name": "archviz-asset-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "建筑素材中台桌面拖拽外壳",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test path.test.cjs"
+  },
+  "devDependencies": {
+    "electron": "^44.0.0"
+  }
+}

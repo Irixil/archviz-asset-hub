@@ -1,0 +1,18 @@
+{{template "base" .}}
+
+{{define "headline"}}
+<h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:38px;font-weight:400;line-height:1.2;color:#3a3228;text-align:center;">
+  Your ingress source is <em style="font-style:italic;">connected</em>.
+</h1>
+{{end}}
+
+{{define "body_text"}}
+<p style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;font-weight:400;line-height:1.65;color:#5a4e44;text-align:center;">
+  <strong style="color:#3a3228;font-weight:600;">{{.SourceName}}</strong> is now active and will automatically
+  import files into your workspace as they arrive.
+</p>
+{{end}}
+
+{{define "cta"}}
+<a href="{{.IngressURL}}" style="display:inline-block;background-color:rgb(15, 23, 38);color:#f4efe4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.04em;text-decoration:none;padding:14px 36px;border-radius:2px;">View ingress sources</a>
+{{end}}

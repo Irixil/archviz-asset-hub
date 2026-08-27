@@ -1,0 +1,1 @@
+-- Irreversible data migration: existing workflow enabled states are intentionally not restored.

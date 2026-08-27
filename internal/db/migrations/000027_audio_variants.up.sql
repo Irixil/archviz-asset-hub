@@ -1,0 +1,4 @@
+-- 000027_audio_variants.up.sql
+-- variants.type now accepts the following additional values:
+--   extract_audio | transcode_audio | normalize_audio
+-- No structural changes. Recorded for migration sequence continuity.

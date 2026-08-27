@@ -1,0 +1,36 @@
+{
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "trigger.asset_created",
+      "config": {},
+      "position": { "x": 120, "y": 120 }
+    },
+    {
+      "id": "mime",
+      "type": "filter.mime",
+      "config": { "prefix": "application/pdf" },
+      "position": { "x": 520, "y": 120 }
+    },
+    {
+      "id": "move",
+      "type": "action.move_folder",
+      "config": { "folder_id": "folder_inbox" },
+      "position": { "x": 920, "y": 120 }
+    }
+  ],
+  "edges": [
+    {
+      "from_node": "trigger",
+      "from_port": "out",
+      "to_node": "mime",
+      "to_port": "in"
+    },
+    {
+      "from_node": "mime",
+      "from_port": "match",
+      "to_node": "move",
+      "to_port": "in"
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{{define "base"}}<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>{{.AppName}}</title>
+  <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
+  <style>
+    #outlook a { padding: 0; }
+    .ReadMsgBody, .ExternalClass { width: 100%; }
+    .ExternalClass, .ExternalClass p, .ExternalClass span,
+    .ExternalClass font, .ExternalClass td, .ExternalClass div { line-height: 100%; }
+    body, table, td, p, a, li, blockquote { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; display: block; outline: none; }
+  </style>
+</head>
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+
+<!-- Preheader: invisible inbox preview text -->
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#e8e3d8;">{{.Preheader}}&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;</div>
+
+<!-- ═══════════════════════════════════════════════
+     OUTER WRAPPER
+═══════════════════════════════════════════════ -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td align="center" style="padding:40px 16px 40px;">
+
+  <!-- Email card: max 600px -->
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
+
+    <!-- ══════════════════════════════════════
+         HEADER — dark background
+    ══════════════════════════════════════ -->
+    <tr>
+      <td style="background-color:rgb(15,23,38);padding:44px 48px 36px;text-align:center;border-radius:4px 4px 0 0;">
+
+        <!-- Wordmark -->
+        <p style="margin:0 0 18px;font-family:Georgia,'Times New Roman',serif;font-size:26px;font-weight:400;letter-spacing:0.38em;color:#f4efe4;text-transform:uppercase;line-height:1;">D A M A S K</p>
+
+        <!-- Diamond rule -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:200px;margin:0 auto;">
+          <tr>
+            <td style="border-top:1px solid rgba(244,239,228,.3);vertical-align:middle;">&nbsp;</td>
+            <td style="text-align:center;padding:0 10px;color:rgba(244,239,228,.45);font-size:13px;white-space:nowrap;vertical-align:top;width:50px;line-height:3px;">&#9671;</td>
+            <td style="border-top:1px solid rgba(244,239,228,.3);vertical-align:middle;">&nbsp;</td>
+          </tr>
+        </table>
+
+        <!-- Event label + date -->
+        <p style="margin:14px 0 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:10.5px;font-weight:400;letter-spacing:0.22em;color:rgba(244,239,228,.65);text-transform:uppercase;line-height:1.4;">
+          {{- if .EventLabel}}{{.EventLabel}}&nbsp;&middot;&nbsp;{{end -}}
+          {{.Date}}
+        </p>
+
+      </td>
+    </tr>
+
+    <!-- ══════════════════════════════════════
+         BODY — white
+    ══════════════════════════════════════ -->
+    <tr>
+      <td style="background-color:#f4efe4;padding:48px 56px 0;">
+
+        <!-- Optional workspace name -->
+        {{if .WorkspaceName}}
+        <p style="margin:0 0 16px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:10.5px;font-weight:500;letter-spacing:0.22em;color:#8a7a6a;text-transform:uppercase;">{{.WorkspaceName}}</p>
+        {{end}}
+
+        <!-- ── Headline block ── -->
+        {{block "headline" .}}{{end}}
+
+      </td>
+    </tr>
+
+    <!-- Ornament divider -->
+    <tr>
+      <td style="background-color:#f4efe4;padding:32px 56px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="border-top:1px solid #c8b99a;vertical-align:middle;">&nbsp;</td>
+            <td style="text-align:center;padding:0 14px;color:#c8b99a;font-size:13px;white-space:nowrap;vertical-align:top;width:50px;line-height:3px;">&#9671;</td>
+            <td style="border-top:1px solid #c8b99a;vertical-align:middle;">&nbsp;</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- ── Body text block ── -->
+    <tr>
+      <td style="background-color:#f4efe4;padding:0 56px;">
+        {{block "body_text" .}}{{end}}
+      </td>
+    </tr>
+
+    <!-- ── Card block (optional; child defines this row's content) ── -->
+    {{block "card" .}}{{end}}
+
+    <!-- ── CTA block ── -->
+    <tr>
+      <td style="background-color:#f4efe4;padding:36px 56px 52px;text-align:center;">
+        {{block "cta" .}}{{end}}
+      </td>
+    </tr>
+
+    <!-- Footer ornament -->
+    <tr>
+      <td style="background-color:#f4efe4;padding:0 56px 28px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="border-top:1px solid #c8b99a;vertical-align:middle;">&nbsp;</td>
+            <td style="text-align:center;padding:0 14px;color:#c8b99a;font-size:13px;white-space:nowrap;vertical-align:top;width:50px;line-height:3px;">&#9671;</td>
+            <td style="border-top:1px solid #c8b99a;vertical-align:middle;">&nbsp;</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+      <td style="background-color:#f4efe4;padding:0 56px 48px;text-align:center;border-radius:0 0 4px 4px;">
+        <p style="margin:0 0 4px;font-family:Georgia,'Times New Roman',serif;font-size:15px;font-weight:400;letter-spacing:0.28em;color:#3a3228;text-transform:uppercase;line-height:1.3;">D A M A S K</p>
+        <p style="margin:0 0 22px;font-family:Georgia,'Times New Roman',serif;font-size:12.5px;font-style:italic;color:#8a7a6a;line-height:1.4;">A home for your digital work.</p>
+        <p style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:10px;font-weight:400;letter-spacing:0.18em;color:#a0907e;text-transform:uppercase;line-height:1.8;">
+          <a href="{{.SettingsURL}}" style="color:#a0907e;text-decoration:none;">Settings</a>
+          &nbsp;&middot;&nbsp;
+          <a href="{{.WorkspaceURL}}" style="color:#a0907e;text-decoration:none;">Workspace</a>
+          &nbsp;&middot;&nbsp;
+          <a href="{{.SettingsURL}}" style="color:#a0907e;text-decoration:none;">Unsubscribe</a>
+        </p>
+      </td>
+    </tr>
+
+  </table><!-- /email card -->
+
+</td></tr>
+</table><!-- /outer wrapper -->
+
+</body>
+</html>{{end}}

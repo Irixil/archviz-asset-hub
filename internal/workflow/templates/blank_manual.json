@@ -1,0 +1,11 @@
+{
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "trigger.manual",
+      "config": {},
+      "position": { "x": 120, "y": 120 }
+    }
+  ],
+  "edges": []
+}

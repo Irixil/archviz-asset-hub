@@ -1,0 +1,26 @@
+services:
+  archviz-asset-hub:
+    container_name: archviz-asset-hub
+    build: .
+    image: archviz-asset-hub:local
+    hostname: archviz-asset-hub
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_PATH: /data/damask.db
+      STORAGE: local
+      STORAGE_LOCAL_PATH: /data/storage
+    expose:
+      - 2525
+    ports:
+      - "${PORT:-8080}:8080"
+      - "${MAIL_PORT:-2525}:2525"
+    volumes:
+      - "${ARCHVIZ_DATA_PATH:-./data}:/data"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

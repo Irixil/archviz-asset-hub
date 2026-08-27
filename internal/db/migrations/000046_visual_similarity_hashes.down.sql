@@ -1,0 +1,2 @@
+DROP INDEX IF EXISTS idx_visual_similarity_hashes_workspace_hash;
+DROP TABLE IF EXISTS asset_visual_similarity_hashes;

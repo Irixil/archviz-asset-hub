@@ -1,0 +1,36 @@
+{
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "trigger.asset_created",
+      "config": {},
+      "position": { "x": 120, "y": 120 }
+    },
+    {
+      "id": "mime",
+      "type": "filter.mime",
+      "config": { "prefix": "image/" },
+      "position": { "x": 520, "y": 120 }
+    },
+    {
+      "id": "describe",
+      "type": "action.ai_image_description",
+      "config": {},
+      "position": { "x": 920, "y": 120 }
+    }
+  ],
+  "edges": [
+    {
+      "from_node": "trigger",
+      "from_port": "out",
+      "to_node": "mime",
+      "to_port": "in"
+    },
+    {
+      "from_node": "mime",
+      "from_port": "match",
+      "to_node": "describe",
+      "to_port": "in"
+    }
+  ]
+}

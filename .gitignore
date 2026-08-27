@@ -1,0 +1,56 @@
+# Binaries
+bin/
+/dist/
+*.exe
+
+# Environment
+.env
+.env.local
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Storage
+/storage/
+/data/
+
+# Node
+cmd/server/web/node_modules/
+cmd/server/web/.svelte-kit/
+cmd/server/web/build/
+
+# Go
+vendor/
+coverage
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.codex
+.claude/
+CLAUDE.md
+/docs
+AGENTS.md
+.agents
+skills-lock.json
+/DESIGN.json
+/DESIGN.md
+/PRODUCT.md
+/.impeccable/
+/.impeccable-live.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TMP
+/tmp/
+/ROADMAP.md
+/IDEAS.*
+/ISSUES.*
+/ROADMAP.*
+/CODEBASE.mermaid

@@ -1,0 +1,26 @@
+{{template "base" .}}
+
+{{define "headline"}}
+<h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:36px;font-weight:400;line-height:1.2;color:#3a3228;text-align:center;">
+  An ingress source has been <em style="font-style:italic;">disabled</em>.
+</h1>
+{{end}}
+
+{{define "body_text"}}
+<p style="margin:0 0 20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;font-weight:400;line-height:1.65;color:#5a4e44;text-align:center;">
+  <strong style="color:#3a3228;font-weight:600;">{{.SourceName}}</strong> was automatically disabled
+  after repeated failures. No further imports will run until you re-enable it.
+</p>
+<!-- Error detail -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td style="background-color:#ede8dc;border-left:3px solid #c8b99a;padding:14px 18px;border-radius:2px;">
+      <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:12px;color:#6b5e52;line-height:1.5;word-break:break-word;">{{.ErrMsg}}</p>
+    </td>
+  </tr>
+</table>
+{{end}}
+
+{{define "cta"}}
+<a href="{{.IngressURL}}" style="display:inline-block;background-color:rgb(15, 23, 38);color:#f4efe4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.04em;text-decoration:none;padding:14px 36px;border-radius:2px;">Re-enable source</a>
+{{end}}

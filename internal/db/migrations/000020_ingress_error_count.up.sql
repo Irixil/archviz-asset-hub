@@ -1,0 +1,1 @@
+ALTER TABLE ingress_sources ADD COLUMN error_count INTEGER NOT NULL DEFAULT 0;

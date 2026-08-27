@@ -1,0 +1,16 @@
+.git
+web/node_modules/
+web/.svelte-kit/
+web/build/
+server/bin/
+server/tmp/
+*.db
+*.db-shm
+*.db-wal
+storage/
+.env
+.vscode/
+.idea/
+*.md
+.github/
+.claude/
